@@ -1,0 +1,24 @@
+
+agm-map {
+    height: 100vh;
+}
+
+.buttons {
+    right: 25px;
+    bottom: 25px;
+    position: absolute;
+}
+
+.buttons > button {
+    margin-left: 20px;
+}
+
+.pixabay {
+    z-index: 999;
+    position: absolute;
+    left: 25px;
+    top: 25px;
+}
+.pixabay img {
+    width: 50px;
+}
