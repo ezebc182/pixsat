@@ -8,3 +8,13 @@
 * Track position in real-time.
 * Retrieve cities names from current ISS position.
 * See photos or videos related to current ISS position.
+
+#### API's
+* Google Maps
+* Google Geocode
+* Pixabay
+
+#### Stack
+* Angular 6
+* Rxjs
+* Angular Material
