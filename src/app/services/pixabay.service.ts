@@ -12,12 +12,17 @@ export class PixabayService {
     }
 
     getPhotos(query: string) {
-        return this.http.get(`${environment.PIXABAY.endpoint}?key=${environment.PIXABAY.key}&q=${query}`)
+        console.log('eze query', query);
+        const search = query
+            .toLowerCase(); // encodeURIComponent(query);
+        return this.http.get(`${environment.PIXABAY.endpoint}?key=${environment.PIXABAY.key}&q=${search}&per_page=15&safesearch=true&image_type=picture`)
             .pipe(map(response => response));
     }
 
     getVideos(query: string) {
-        return this.http.get(`${environment.PIXABAY.endpoint}videos/?key=${environment.PIXABAY.key}&q=${query}`)
+        const search = query
+            .toLowerCase(); // encodeURIComponent(query);
+        return this.http.get(`${environment.PIXABAY.endpoint}videos/?key=${environment.PIXABAY.key}&q=${search}&per_page=15&safesearch=true`)
             .pipe(map(response => response));
     }
 }

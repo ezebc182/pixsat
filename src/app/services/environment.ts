@@ -8,9 +8,15 @@ export const environment = {
         key: '10397002-c2d687bc4283324cd4f90ab5f',
         endpoint: 'https://pixabay.com/api/'
     },
+    ISS: {
+        endpoint: 'http://api.open-notify.org/iss-now.json'
+    },
     GOOGLE: {
         GEOCODE: {
-            endpoint: 'https://maps.googleapis.com/maps/api/geocode/'
+            endpoint: 'https://maps.googleapis.com/maps/api/geocode/json'
+        },
+        PLACE: {
+            endpoint: 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json'
         },
         FIREBASE: {
             apiKey: 'AIzaSyCemMirPDJF3qYKnS2u8P5eOxyd3VLB9tg',
