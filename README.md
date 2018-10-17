@@ -7,12 +7,12 @@
 * Render a map with current ISS location.
 * Track position in real-time.
 * Retrieve cities names from current ISS position.
-* See photos or videos related to current ISS position.
+* See photos or videos bassed on current ISS position.
 
 #### API's
 * Google Maps
-* Google Geocode
-* Pixabay
+* [Google Reverse geocode](https://developers.google.com/maps/documentation/geocoding/intro#ReverseGeocoding)
+* [Pixabay](https://pixabay.com/api/docs/)
 
 #### Stack
 * Angular 6
