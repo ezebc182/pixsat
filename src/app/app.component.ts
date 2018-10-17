@@ -64,11 +64,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
     syncPosition() {
         this.locationService.getCurrentPosition().subscribe((response: WtISSResponse) => {
-            if (response) {
-                this.updateLocation(response);
-                this.showMessage('iss position updated successfully!');
-            }
-        }, (e) => this.error(e));
+                if (response) {
+                    this.updateLocation(response);
+                }
+            }, (e) => this.error(e),
+            () =>
+                this.showMessage('ISS position updated successfully!'));
     }
 
     toggleTracking() {
@@ -77,8 +78,7 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     startTracking() {
-        this.showMessage('Tracking iss position ...');
-
+        this.showMessage('Tracking ISS position ...');
         this.subscriptionISS = this.locationService.track()
             .subscribe((response: WtISSResponse) => {
                 this.updateLocation(response);
@@ -112,17 +112,13 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     openDialog(sources): void {
-        const dialogRef = this.dialog.open(DisplayResultsComponent, {
+        this.dialog.open(DisplayResultsComponent, {
             width: '600px',
             data: {
                 location: this.currentCity,
                 resources: sources.hits,
                 type: this.selection
             }
-        });
-
-        dialogRef.afterClosed().subscribe(result => {
-            console.log('The dialog was closed');
         });
     }
 
