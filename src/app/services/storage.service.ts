@@ -14,6 +14,10 @@ export class StorageService {
         storage.setItem(key, JSON.stringify(data));
     }
 
+    exists(key: string, storage: Storage): boolean {
+        return !!storage.getItem(key);
+    }
+
     get(key: string, storage: Storage): Promise<Satellite | null> {
         return new Promise(((resolve, reject) => {
             if (storage.getItem(key)) {

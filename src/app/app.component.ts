@@ -14,9 +14,9 @@ import {delay} from 'rxjs/operators';
 import {WtISSResponse} from './interfaces/wtissat.interface';
 import {StorageService} from './services/storage.service';
 import {Satellite} from './models/satellite.class';
-import {WelcomeComponent} from './components/welcome/welcome.component';
 
 const LOCAL_KEY = 'last_position';
+const STORAGE = localStorage;
 
 @Component({
     selector: 'app-root',
@@ -45,6 +45,14 @@ export class AppComponent implements OnInit, OnDestroy {
         private pixabayService: PixabayService,
         public snack: MatSnackBar,
         public dialog: MatDialog) {
+        this.lat = 0;
+        this.lng = 0;
+        this.satellite = {
+            lat: 0,
+            lng: 0,
+            altitude: 0,
+            velocity: 0
+        };
     }
 
     ngOnInit() {
@@ -60,16 +68,19 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     syncPosition() {
-        this.storageService.get(LOCAL_KEY, localStorage).then(lastKnownPosition => {
-            this.lat = lastKnownPosition.lat || 0;
-            this.lng = lastKnownPosition.lng || 0;
-            this.satellite = {
-                lat: lastKnownPosition.lat || 0,
-                lng: lastKnownPosition.lng || 0,
-                altitude: lastKnownPosition.altitude || 0,
-                velocity: lastKnownPosition.velocity || 0
-            };
-        });
+        if (this.storageService.exists(LOCAL_KEY, STORAGE)) {
+            this.storageService.get(LOCAL_KEY, STORAGE).then(lastKnownPosition => {
+                this.lat = lastKnownPosition.lat;
+                this.lng = lastKnownPosition.lng;
+                this.satellite = {
+                    ...this.satellite,
+                    lat: lastKnownPosition.lat,
+                    lng: lastKnownPosition.lng,
+                    altitude: lastKnownPosition.altitude,
+                    velocity: lastKnownPosition.velocity
+                };
+            });
+        }
 
         this.locationService.getCurrentPosition().subscribe((response: WtISSResponse) => {
                 if (response) {
@@ -139,7 +150,7 @@ export class AppComponent implements OnInit, OnDestroy {
                 altitude: response.altitude,
                 velocity: response.velocity
             };
-            this.storageService.set(LOCAL_KEY, this.satellite, localStorage);
+            this.storageService.set(LOCAL_KEY, this.satellite, STORAGE);
             this.lat = response.latitude;
             this.lng = response.longitude;
             this.locationService.getCityFromLocation(response).subscribe((data) => {
@@ -149,7 +160,7 @@ export class AppComponent implements OnInit, OnDestroy {
                         ...this.satellite,
                         currentPlace: this.currentCity
                     };
-                    this.storageService.set(LOCAL_KEY, this.satellite, localStorage);
+                    this.storageService.set(LOCAL_KEY, this.satellite, STORAGE);
                 }
             }, (e) => this.error(e));
         }
