@@ -3,3 +3,4 @@ export interface PixalResource {
     resources: Array<any> | string;
     type: string;
 }
+

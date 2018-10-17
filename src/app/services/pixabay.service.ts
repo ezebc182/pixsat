@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {environment} from './environment';
 import {map} from 'rxjs/operators';
+import {environment} from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -12,17 +12,16 @@ export class PixabayService {
     }
 
     getPhotos(query: string) {
-        console.log('eze query', query);
-        const search = query
-            .toLowerCase(); // encodeURIComponent(query);
-        return this.http.get(`${environment.PIXABAY.endpoint}?key=${environment.PIXABAY.key}&q=${search}&per_page=15&safesearch=true&image_type=picture`)
+        const search = query.toLowerCase();
+        return this.http.get(
+            `${environment.pixabay.endpoint}?key=${environment.pixabay.key}&q=${search}&per_page=15&safesearch=true&image_type=picture`)
             .pipe(map(response => response));
     }
 
     getVideos(query: string) {
-        const search = query
-            .toLowerCase(); // encodeURIComponent(query);
-        return this.http.get(`${environment.PIXABAY.endpoint}videos/?key=${environment.PIXABAY.key}&q=${search}&per_page=15&safesearch=true`)
+        const search = query.toLowerCase();
+        return this.http.get(
+            `${environment.pixabay.endpoint}videos/?key=${environment.pixabay.key}&q=${search}&per_page=15&safesearch=true`)
             .pipe(map(response => response));
     }
 }

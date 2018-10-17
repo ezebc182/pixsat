@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subscription} from 'rxjs';
+import {of, Subscription} from 'rxjs';
 import {
     ControlPosition,
     StreetViewControlOptions,
@@ -9,9 +9,10 @@ import {
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {PixabayService} from './services/pixabay.service';
 import {LocationService} from './services/location.service';
-import {ISSResponse} from './interfaces/iss.interface';
 import {Marker} from './interfaces/marker.interface';
 import {DisplayResultsComponent} from './components/display-results/display-results.component';
+import {delay} from 'rxjs/operators';
+import {WtISSResponse} from './interfaces/wtissat.interface';
 
 
 @Component({
@@ -62,19 +63,11 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     syncPosition() {
-        let message;
-        this.locationService.getCurrentPosition().subscribe((response: any) => {
-            if (response.message === 'success') {
-                this.lat = this.satellite.lat = parseFloat(response.iss_position.latitude);
-                this.lng = this.satellite.lng = parseFloat(response.iss_position.longitude);
-                message = 'ISS position updated successfully!';
-                this.locationService.getCityFromLocation(response.iss_position).subscribe((data) => {
-                    if (data && data.status !== 'ZERO_RESULTS') {
-                        this.currentCity = this.transformDataToCity(data);
-                    }
-                });
+        this.locationService.getCurrentPosition().subscribe((response: WtISSResponse) => {
+            if (response) {
+                this.updateLocation(response);
+                this.showMessage('iss position updated successfully!');
             }
-            this.showMessage(message);
         }, (e) => this.error(e));
     }
 
@@ -84,32 +77,37 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     startTracking() {
-        this.showMessage('Tracking ISS position ...');
+        this.showMessage('Tracking iss position ...');
 
         this.subscriptionISS = this.locationService.track()
-            .subscribe((response: ISSResponse) => {
-                if (response.message === 'success') {
-                    this.lat = this.satellite.lat = parseFloat(response.iss_position.latitude);
-                    this.lng = this.satellite.lng = parseFloat(response.iss_position.longitude);
-                }
+            .subscribe((response: WtISSResponse) => {
+                this.updateLocation(response);
             }, (e) => this.error(e));
     }
 
     stopTracking() {
         this.subscriptionISS.unsubscribe();
         this.satellite.lat = this.satellite.lng = null;
-        this.showMessage('Stopping ISS  tracking position ...');
+        this.showMessage('Stopping iss  tracking position ...');
     }
 
     getResources() {
         let request = 'getPhotos';
+        let action = null;
+        let results = 'No results found';
         if (this.selection && this.selection !== 'photos') {
             request = 'getVideos';
         }
-        this.showMessage(`Retrieving ${this.selection} from ${this.currentCity}`);
-        this.pixabayService[request](this.currentCity).subscribe((sources) => {
-            const snackRef = this.snack.open('Results found', `Open to see ${this.selection}`);
-            snackRef.onAction().subscribe(() => this.openDialog(sources));
+        of(this.showMessage(`Retrieving ${this.selection} from ${this.currentCity}`))
+            .pipe(delay(1500)).subscribe(() => {
+            this.pixabayService[request](this.currentCity).subscribe((resources) => {
+                if (resources && resources.totalHits > 0) {
+                    action = `Open to see ${this.selection}`;
+                    results = 'Results found';
+                }
+                const snackRef = this.snack.open(results, action);
+                snackRef.onAction().subscribe(() => this.openDialog(resources));
+            });
         });
     }
 
@@ -126,6 +124,18 @@ export class AppComponent implements OnInit, OnDestroy {
         dialogRef.afterClosed().subscribe(result => {
             console.log('The dialog was closed');
         });
+    }
+
+    private updateLocation(response: WtISSResponse) {
+        if (response) {
+            this.lat = this.satellite.lat = response.latitude;
+            this.lng = this.satellite.lng = response.longitude;
+            this.locationService.getCityFromLocation(response).subscribe((data) => {
+                if (data && data.status !== 'ZERO_RESULTS') {
+                    this.currentCity = this.transformDataToCity(data);
+                }
+            }, (e) => this.error(e));
+        }
     }
 
     private showMessage(message: string) {
@@ -153,8 +163,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
     private slugify(text) {
         return text.toString()
-            .replace(/[^\w\-]+/g, ' ')       // Remove all non-word chars
-            .replace(/\s+/g, '+');           // Replace spaces with -
+            .replace(/[^\w\-]+/g, ' ')
+            .replace(/\s+/g, '+');
     }
 }
 

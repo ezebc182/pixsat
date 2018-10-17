@@ -5,10 +5,11 @@ import {MaterialModule} from './material.module';
 import {AppComponent} from './app.component';
 import {HttpClientModule} from '@angular/common/http';
 import {AgmCoreModule} from '@agm/core';
-import {environment} from './services/environment';
+import {environment} from '../environments/environment';
 import {PixabayService} from './services/pixabay.service';
 import {LocationService} from './services/location.service';
 import {DisplayResultsComponent} from './components/display-results/display-results.component';
+import {SafePipe} from './pipes/safe.pipe';
 
 
 @NgModule({
@@ -18,10 +19,10 @@ import {DisplayResultsComponent} from './components/display-results/display-resu
         MaterialModule,
         HttpClientModule,
         AgmCoreModule.forRoot({
-            apiKey: environment.GOOGLE.KEY
+            apiKey: environment.google.key
         })
     ],
-    declarations: [AppComponent, DisplayResultsComponent],
+    declarations: [AppComponent, DisplayResultsComponent, SafePipe],
     providers: [LocationService, PixabayService],
     entryComponents: [DisplayResultsComponent],
     bootstrap: [AppComponent]

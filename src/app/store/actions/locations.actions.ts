@@ -1,1 +1,1 @@
-export const LOAD_LOCATION = '[LOCATION] '
+export const LOAD_LOCATION = '[LOCATION] ';

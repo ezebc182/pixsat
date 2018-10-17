@@ -6,3 +6,4 @@ export interface ISSResponse {
     timestamp: number;
     message: string;
 }
+

@@ -4,29 +4,37 @@
 
 export const environment = {
     production: false,
-    PIXABAY: {
+    pixabay: {
         key: '10397002-c2d687bc4283324cd4f90ab5f',
         endpoint: 'https://pixabay.com/api/'
     },
-    ISS: {
+    nasa: {
+        key: '0ciyfwqaXio5djlpZVUYihTOuJjltZwI3tNf1fHm',
+        endpoint: 'https://api.nasa.gov/planetary/apod?api_key='
+    },
+    wheretheissat: {
+        endpoint: 'https://api.wheretheiss.at/v1/satellites',
+        issID: '25544'
+    },
+    iss: {
         endpoint: 'http://api.open-notify.org/iss-now.json'
     },
-    GOOGLE: {
-        GEOCODE: {
+    google: {
+        geocode: {
             endpoint: 'https://maps.googleapis.com/maps/api/geocode/json'
         },
-        PLACE: {
+        place: {
             endpoint: 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json'
         },
-        FIREBASE: {
-            apiKey: 'AIzaSyCemMirPDJF3qYKnS2u8P5eOxyd3VLB9tg',
-            authDomain: 'pixsat-d4641.firebaseapp.com',
-            databaseURL: 'https://pixsat-d4641.firebaseio.com',
-            projectId: 'pixsat-d4641',
-            storageBucket: 'pixsat-d4641.appspot.com',
-            messagingSenderId: '275471394807'
+        firebase: {
+            apiKey: 'AIzaSyBN5qhUuVq87MhAPkQ79WM9ifg_sWQ2ZcY',
+            authDomain: 'pixsat-9e582.firebaseapp.com',
+            databaseURL: 'https://pixsat-9e582.firebaseio.com',
+            projectId: 'pixsat-9e582',
+            storageBucket: '',
+            messagingSenderId: '161859528725'
         },
-        KEY: 'AIzaSyAb5Ddu9xGwyz0VzYD9wZkWdYutqrWF_1E'
+        key: 'AIzaSyAb5Ddu9xGwyz0VzYD9wZkWdYutqrWF_1E'
     }
 };
 

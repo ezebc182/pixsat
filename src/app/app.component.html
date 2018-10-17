@@ -8,6 +8,7 @@
         [latitude]="lat"
         [longitude]="lng"
         [minZoom]="3"
+        [styles]="styles"
         [fullscreenControl]="true"
         [streetViewControlOptions]="streetViewControlOptions"
         [zoomControlOptions]="zoomControlOptions"
@@ -24,7 +25,10 @@
                     <strong>{{ 'ISS '}}</strong>
                 </a>
             </p>
-            <p>Current position</p>
+            <p>
+                Current position:
+                <strong>{{currentCity ? currentCity : 'Unknown'}}</strong>
+            </p>
             LAT: {{lat }}<br/>
             LNG: {{ lng }}
         </agm-info-window>
@@ -35,7 +39,7 @@
 
     <button mat-fab color="default"
             matTooltip="Get {{ selection === 'photos' ? 'photos' : 'videos'}}"
-            [disabled]="tracking || !(satellite?.lat && satellite?.lng)"
+            [disabled]="!currentCity"
             (click)="getResources()">
         <i class="material-icons">
             {{selection === 'photos' ? 'photo' : 'video_library'}}
