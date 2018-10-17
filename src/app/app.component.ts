@@ -9,11 +9,14 @@ import {
 import {MatDialog, MatSnackBar} from '@angular/material';
 import {PixabayService} from './services/pixabay.service';
 import {LocationService} from './services/location.service';
-import {Marker} from './interfaces/marker.interface';
 import {DisplayResultsComponent} from './components/display-results/display-results.component';
 import {delay} from 'rxjs/operators';
 import {WtISSResponse} from './interfaces/wtissat.interface';
+import {StorageService} from './services/storage.service';
+import {Satellite} from './models/satellite.class';
+import {WelcomeComponent} from './components/welcome/welcome.component';
 
+const LOCAL_KEY = 'last_position';
 
 @Component({
     selector: 'app-root',
@@ -21,10 +24,9 @@ import {WtISSResponse} from './interfaces/wtissat.interface';
     styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit, OnDestroy {
-    title = 'My first AGM project';
-    lat = 51.678418;
-    lng = 7.809007;
-    satellite: Marker;
+    lat: number;
+    lng: number;
+    satellite: Satellite;
     selection: string;
     currentCity: string;
     subscriptionISS: Subscription;
@@ -38,16 +40,11 @@ export class AppComponent implements OnInit, OnDestroy {
     tracking: boolean;
 
     constructor(
+        private storageService: StorageService,
         private locationService: LocationService,
         private pixabayService: PixabayService,
         public snack: MatSnackBar,
         public dialog: MatDialog) {
-        this.satellite = {
-            draggable: false,
-            lat: 51.678418,
-            lng: 7.809007,
-            label: 'ISS'
-        };
     }
 
     ngOnInit() {
@@ -63,6 +60,17 @@ export class AppComponent implements OnInit, OnDestroy {
     }
 
     syncPosition() {
+        this.storageService.get(LOCAL_KEY, localStorage).then(lastKnownPosition => {
+            this.lat = lastKnownPosition.lat || 0;
+            this.lng = lastKnownPosition.lng || 0;
+            this.satellite = {
+                lat: lastKnownPosition.lat || 0,
+                lng: lastKnownPosition.lng || 0,
+                altitude: lastKnownPosition.altitude || 0,
+                velocity: lastKnownPosition.velocity || 0
+            };
+        });
+
         this.locationService.getCurrentPosition().subscribe((response: WtISSResponse) => {
                 if (response) {
                     this.updateLocation(response);
@@ -124,11 +132,24 @@ export class AppComponent implements OnInit, OnDestroy {
 
     private updateLocation(response: WtISSResponse) {
         if (response) {
-            this.lat = this.satellite.lat = response.latitude;
-            this.lng = this.satellite.lng = response.longitude;
+            this.satellite = {
+                ...this.satellite,
+                lat: response.latitude,
+                lng: response.longitude,
+                altitude: response.altitude,
+                velocity: response.velocity
+            };
+            this.storageService.set(LOCAL_KEY, this.satellite, localStorage);
+            this.lat = response.latitude;
+            this.lng = response.longitude;
             this.locationService.getCityFromLocation(response).subscribe((data) => {
                 if (data && data.status !== 'ZERO_RESULTS') {
                     this.currentCity = this.transformDataToCity(data);
+                    this.satellite = {
+                        ...this.satellite,
+                        currentPlace: this.currentCity
+                    };
+                    this.storageService.set(LOCAL_KEY, this.satellite, localStorage);
                 }
             }, (e) => this.error(e));
         }

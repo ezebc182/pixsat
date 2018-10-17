@@ -28,8 +28,9 @@
                 Current position:
                 <strong>{{currentCity ? currentCity : 'Unknown'}}</strong>
             </p>
-            LAT: {{lat }}<br/>
-            LNG: {{ lng }}
+            LAT: {{lat | number }} - LNG: {{ lng | number }} <br/>
+            Velocity: {{ satellite?.velocity | number }} km/h<br/>
+            Altitude: {{ satellite?.altitude | number }} km
         </agm-info-window>
     </agm-marker>
 </agm-map>

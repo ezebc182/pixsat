@@ -10,6 +10,8 @@ import {PixabayService} from './services/pixabay.service';
 import {LocationService} from './services/location.service';
 import {DisplayResultsComponent} from './components/display-results/display-results.component';
 import {SafePipe} from './pipes/safe.pipe';
+import {StorageService} from './services/storage.service';
+import {WelcomeComponent} from './components/welcome/welcome.component';
 
 
 @NgModule({
@@ -22,9 +24,9 @@ import {SafePipe} from './pipes/safe.pipe';
             apiKey: environment.google.key
         })
     ],
-    declarations: [AppComponent, DisplayResultsComponent, SafePipe],
-    providers: [LocationService, PixabayService],
-    entryComponents: [DisplayResultsComponent],
+    declarations: [AppComponent, DisplayResultsComponent, WelcomeComponent, SafePipe],
+    providers: [LocationService, PixabayService, StorageService],
+    entryComponents: [DisplayResultsComponent, WelcomeComponent],
     bootstrap: [AppComponent]
 })
 export class AppModule {
