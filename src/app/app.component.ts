@@ -154,6 +154,7 @@ export class AppComponent implements OnInit, OnDestroy {
         }).afterClosed().subscribe((userPreferences: UserPreferences) => {
             if (userPreferences) {
                 this.storageService.set(USER_KEY, userPreferences, STORAGE);
+                this.init(userPreferences);
             }
         });
     }
@@ -228,17 +229,7 @@ export class AppComponent implements OnInit, OnDestroy {
         this.storageService.get(USER_KEY, localStorage)
             .then((data: UserPreferences) => {
                 if (data) {
-                    this.translate.use(data.language);
-                    this.settings = {
-                        ...this.settings,
-                        trackOnInit: data.trackOnInit,
-                        resourceType: data.resourceType,
-                        resultsQuantity: data.resultsQuantity,
-                        language: data.language
-                    };
-                    if (data.trackOnInit) {
-                        this.toggleTracking();
-                    }
+                    this.init(data);
                 }
             }).catch(() => {
             dialogUserRef = this.openSettings();
@@ -246,6 +237,20 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
         this.syncPosition();
+    }
+
+    private init(data: UserPreferences) {
+        this.translate.use(data.language);
+        this.settings = {
+            ...this.settings,
+            trackOnInit: data.trackOnInit,
+            resourceType: data.resourceType,
+            resultsQuantity: data.resultsQuantity,
+            language: data.language
+        };
+        if (data.trackOnInit) {
+            this.toggleTracking();
+        }
     }
 }
 
