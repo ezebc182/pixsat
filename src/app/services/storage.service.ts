@@ -1,5 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Satellite} from '../models/satellite.class';
+import {UserPreferences} from '../models/user-preferences.class';
 
 @Injectable({
     providedIn: 'root'
@@ -18,12 +19,12 @@ export class StorageService {
         return !!storage.getItem(key);
     }
 
-    get(key: string, storage: Storage): Promise<Satellite | null> {
+    get(key: string, storage: Storage): Promise<Satellite | UserPreferences | null> {
         return new Promise(((resolve, reject) => {
             if (storage.getItem(key)) {
                 resolve(JSON.parse(storage.getItem(key)));
             } else {
-                reject();
+                reject(null);
             }
         }));
     }

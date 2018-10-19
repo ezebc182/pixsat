@@ -1,15 +1,17 @@
-import { TestBed, inject } from '@angular/core/testing';
+import {TestBed} from '@angular/core/testing';
 
-import { PixabayService } from './pixabay.service';
+import {PixabayService} from './pixabay.service';
 
 describe('PixabayService', () => {
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      providers: [PixabayService]
+    let service: PixabayService;
+    beforeEach(() => {
+        TestBed.configureTestingModule({
+            providers: [PixabayService]
+        });
+        service = TestBed.get(PixabayService);
     });
-  });
 
-  it('should be created', inject([PixabayService], (service: PixabayService) => {
-    expect(service).toBeTruthy();
-  }));
+    it('should be created', () => {
+        expect(service).toBeTruthy();
+    });
 });

@@ -1,0 +1,49 @@
+<h2 mat-dialog-title>{{'TITLE__USER_SETTINGS' | translate | ucfirst }}</h2>
+<mat-dialog-content>
+    <div class="container">
+        <section class="section">
+            <mat-form-field>
+                <mat-select (selectionChange)="toggleLanguage()"
+                        [(ngModel)]="settings.language"
+                        [value]="data?.language"
+                        placeholder="{{ 'OPTION__SELECT_LANGUAGE' | translate | ucfirst }}">
+                    <mat-option value="en">{{'OPTION__LANGUAGE_EN' | translate | ucfirst}}</mat-option>
+                    <mat-option value="es">{{'OPTION__LANGUAGE_ES' | translate | ucfirst}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </section>
+
+        <section class="section">
+            <mat-checkbox
+                    [(ngModel)]="settings.trackOnInit"
+                    [value]="data?.trackOnInit">
+                {{'OPTION__AUTOPLAY_TRACKING' | translate | ucfirst }}?
+            </mat-checkbox>
+        </section>
+
+
+        <section class="section">
+            <mat-radio-group [value]="data?.resourceType" [(ngModel)]="settings.resourceType">
+                <mat-radio-button value="photos" [checked]="true">{{ 'PHOTOS' | translate | ucfirst}}</mat-radio-button>
+                <mat-radio-button value="videos">{{'VIDEOS' | translate | ucfirst}}</mat-radio-button>
+            </mat-radio-group>
+        </section>
+
+        <section class="section">
+            <mat-form-field class="example-full-width">
+                <input type="number"
+                       [(ngModel)]="settings.resultsQuantity"
+                       min="3"
+                       max="200"
+                       matInput
+                       placeholder="{{'INPUT__RESULTS_PER_PAGE' | translate | ucfirst}}"
+                       [value]="data?.resultsQuantity || 3">
+            </mat-form-field>
+        </section>
+    </div>
+</mat-dialog-content>
+<mat-dialog-actions>
+    <button mat-button mat-dialog-close>{{'ACTION__CLOSE' | translate | ucfirst }}</button>
+    <button (click)="saveSettings()" color="primary" mat-raised-button>{{'ACTION__SAVE' | translate | ucfirst }}
+    </button>
+</mat-dialog-actions>

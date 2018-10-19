@@ -14,7 +14,7 @@ export class PixabayService {
     getPhotos(query: string) {
         const search = query.toLowerCase();
         return this.http.get(
-            `${environment.pixabay.endpoint}?key=${environment.pixabay.key}&q=${search}&per_page=15&safesearch=true&image_type=picture`)
+            `${environment.pixabay.endpoint}?key=${environment.pixabay.key}&q=${search}&per_page=15&safesearch=true&image_type=photo`)
             .pipe(map(response => response));
     }
 

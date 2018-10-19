@@ -3,7 +3,7 @@ import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable, timer} from 'rxjs';
 import {concatMap, map} from 'rxjs/operators';
 import {environment} from '../../environments/environment';
-import {WtISSResponse} from '../interfaces/wtissat.interface';
+import {WtISSResponse} from '../interfaces/wtissat-response.interface';
 
 @Injectable({
     providedIn: 'root'
@@ -32,7 +32,7 @@ export class LocationService {
     getCityFromLocation(location: WtISSResponse) {
         const key = `key=${environment.google.key}`;
         const lang = 'language=en';
-        const latLng = `latlng=${location.latitude},${location.longitude}`; // 'latlng=31.230416,121.473701'; //
+        const latLng = `latlng=${location.latitude},${location.longitude}`;
         const resultType = 'result_type=political|country|administrative_area_level_1|locality|natural_feature';
         return this.http.get(`${environment.google.geocode.endpoint}?${latLng}&${resultType}&${lang}&${key}`)
             .pipe(map((response: any) => response));

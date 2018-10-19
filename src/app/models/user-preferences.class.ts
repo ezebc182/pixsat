@@ -1,5 +1,6 @@
 export class UserPreferences {
     language: string;
-    resources: string;
-    quantity: number;
+    resourceType: string;
+    resultsQuantity: number;
+    trackOnInit: boolean;
 }

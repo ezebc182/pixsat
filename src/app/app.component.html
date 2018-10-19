@@ -25,12 +25,13 @@
                 </a>
             </p>
             <p>
-                Current position:
-                <strong>{{currentCity ? currentCity : 'Unknown'}}</strong>
+                {{'CURRENT_POSITION' | translate | ucfirst }}:
+                <b>{{currentCity ? currentCity : 'UNKNOWN' | ucfirst }}</b>
             </p>
-            LAT: {{lat | number }} - LNG: {{ lng | number }} <br/>
-            Velocity: {{ satellite?.velocity | number }} km/h<br/>
-            Altitude: {{ satellite?.altitude | number }} km
+            {{'LATITUDE' | translate | ucfirst }}: {{lat | number }} - {{ 'LONGITUDE' | translate | ucfirst}}: {{ lng |
+            number }} <br/>
+            {{'VELOCITY' | translate | ucfirst }}: {{ satellite?.velocity | number }} km/h<br/>
+            {{'ALTITUDE' | translate | ucfirst }}: {{ satellite?.altitude | number }} km
         </agm-info-window>
     </agm-marker>
 </agm-map>
@@ -38,28 +39,27 @@
 <div class="buttons">
 
     <button mat-fab color="default"
-            matTooltip="Get {{ selection === 'photos' ? 'photos' : 'videos'}}"
-            [disabled]="!currentCity"
-            (click)="getResources()">
+            [disabled]="tracking"
+            matTooltip="{{'SETTINGS' | translate | ucfirst}}"
+            (click)="openSettings()">
         <i class="material-icons">
-            {{selection === 'photos' ? 'photo' : 'video_library'}}
+            settings
         </i>
     </button>
     <button mat-fab color="accent"
-            [disabled]="tracking"
-            matTooltip="Sync current ISS position"
-            aria-label="Sync current ISS position"
-            (click)="syncPosition()">
+            matTooltip="{{ (settings?.resourceType === 'photos' ? 'GET_PHOTOS' : 'GET_VIDEOS') | translate | ucfirst}}"
+            [disabled]="!currentCity"
+            (click)="getResources()">
         <i class="material-icons">
-            sync
+            {{settings?.resourceType === 'photos' ? 'photo' : 'video_library'}}
         </i>
     </button>
+
     <button mat-fab color="primary"
-            matTooltip="{{tracking ? 'Stop ': 'Start '}} ISS tracking"
-            aria-label="Resume or stop ISS tracking"
+            matTooltip="{{(tracking ? 'STOP_ISS_TRACKING': 'START_ISS_TRACKING') | translate | ucfirst }}"
             (click)="toggleTracking()">
         <i class="material-icons">
-            {{!tracking ? 'play_arrow' : 'pause'}}
+            {{(!tracking) ? 'play_arrow' : 'pause'}}
         </i>
     </button>
 </div>

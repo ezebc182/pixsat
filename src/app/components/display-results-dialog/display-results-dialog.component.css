@@ -1,0 +1,5 @@
+
+.display_dialog_results_photos {
+    display: flex !important;
+    flex-wrap: wrap !important;
+}
