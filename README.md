@@ -30,4 +30,4 @@ For more information about endpoints and API's calls, refer to https://documente
 Yes, of course! Supporting English and Spanish.
 
 #### How to test?
-Just run ```npm run test-headless``` (ChromeHeadless)
+Just run ```ng test```
