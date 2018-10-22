@@ -1,43 +1,84 @@
-<div class="pixabay">
-    <a href="https://pixabay.com/" target="_blank">
-        <img src="https://pixabay.com/static/img/logo_square.png" alt="Pixabay">
-    </a>
+<div class="wrapper">
+  <mat-drawer-container class="sidenav-container">
+    <mat-drawer #drawer class="sidenav" mode="side">
+      <h5>Main menu</h5>
+      <mat-divider></mat-divider>
+      <mat-nav-list>
+        <mat-list-item>
+          <a matLine href="#" (click)="openSettings()">{{'SETTINGS' | translate | ucfirst}}</a>
+        </mat-list-item>
+      </mat-nav-list>
+      <!-- <mat-nav-list dense>
+          <p><strong>User settings</strong></p>
+          <a mat-list-item href="#" (click)="openSettings()">
+            {{'SETTINGS' | translate | ucfirst}}
+          </a>
+          <mat-divider></mat-divider>
+          <p><strong>Latest cities / places</strong></p>
+          <mat-divider></mat-divider>
+      </mat-nav-list> -->
 
-</div>
-<agm-map [latitude]="lat" [longitude]="lng" [minZoom]="3" [fullscreenControl]="true" [streetViewControlOptions]="streetViewControlOptions" [zoomControlOptions]="zoomControlOptions" [zoom]="3">
-    <agm-marker [title]="'ISS'" [latitude]="satellite?.lat" [longitude]="satellite?.lng" [iconUrl]="'assets/img/sat2-mini.png'" [openInfoWindow]="true">
-        <agm-info-window [isOpen]="true">
+    </mat-drawer>
+
+    <div class="sidenav-content">
+      <mat-toolbar color="primary">
+        <mat-toolbar-row>
+          <button mat-icon-button color="default" (click)="drawer.toggle()">
+            <mat-icon>menu</mat-icon>
+          </button>
+          <span>PixSAT</span>
+        </mat-toolbar-row>
+      </mat-toolbar>
+      <agm-map class="map" [latitude]="lat" [longitude]="lng" [minZoom]="3" [fullscreenControl]="true"
+               [streetViewControlOptions]="streetViewControlOptions" [zoomControlOptions]="zoomControlOptions"
+               [zoom]="3">
+        <agm-marker [title]="'ISS'" [latitude]="satellite?.lat" [longitude]="satellite?.lng"
+                    [iconUrl]="'assets/img/sat2-mini.png'" [openInfoWindow]="true">
+          <agm-info-window [isOpen]="true">
             <p>
-                <a target="_blank" href="https://www.nasa.gov/mission_pages/station/main/index.html">
-                    <strong>{{ 'ISS '}}</strong>
-                </a>
+              <a target="_blank" href="https://www.nasa.gov/mission_pages/station/main/index.html">
+                <strong>{{ 'ISS '}}</strong>
+              </a>
             </p>
             <p>
-                {{'CURRENT_POSITION' | translate | ucfirst }}:
-                <b>{{currentCity ? currentCity : 'UNKNOWN' | ucfirst }}</b>
+              {{'CURRENT_POSITION' | translate | ucfirst }}:
+              <b>{{currentCity ? currentCity : ('UNKNOWN' | translate) | ucfirst }}</b>
             </p>
-            {{'LATITUDE' | translate | ucfirst }}: {{lat | number }} - {{ 'LONGITUDE' | translate | ucfirst}}: {{ lng | number }} <br/> {{'VELOCITY' | translate | ucfirst }}: {{ satellite?.velocity | number }} km/h<br/> {{'ALTITUDE' | translate | ucfirst
-            }}: {{ satellite?.altitude | number }} km
-        </agm-info-window>
-    </agm-marker>
-</agm-map>
+            {{'LATITUDE' | translate | ucfirst }}: {{lat | number }} - {{ 'LONGITUDE' | translate |
+            ucfirst}}: {{ lng | number }} <br/> {{'VELOCITY' | translate | ucfirst }}: {{
+            satellite?.velocity | number | unit:[settings?.units, 'velocity'] }}<br/>
+            {{'ALTITUDE' | translate | ucfirst }}: {{ satellite?.altitude | number | unit:[settings?.units] }}
+          </agm-info-window>
+        </agm-marker>
+      </agm-map>
 
-<div class="buttons">
 
-    <button mat-fab color="default" [disabled]="tracking" matTooltip="{{'SETTINGS' | translate | ucfirst}}" (click)="openSettings()">
-			<i class="material-icons">
-					settings
-			</i>
-	</button>
-    <button mat-fab color="accent" matTooltip="{{ (settings?.resourceType === 'photos' ? 'GET_PHOTOS' : 'GET_VIDEOS') | translate | ucfirst}}" [disabled]="!currentCity" (click)="getResources()">
-			<i class="material-icons">
-					{{settings?.resourceType === 'photos' ? 'photo' : 'video_library'}}
-			</i>
-	</button>
+      <div class="buttons">
 
-    <button mat-fab color="primary" matTooltip="{{(tracking ? 'STOP_ISS_TRACKING': 'START_ISS_TRACKING') | translate | ucfirst }}" (click)="toggleTracking()">
-			<i class="material-icons">
-					{{(!tracking) ? 'play_arrow' : 'pause'}}
-			</i>
-	</button>
+        <button mat-fab color="default" [disabled]="tracking" matTooltip="{{'SETTINGS' | translate | ucfirst}}"
+                (click)="openSettings()">
+          <i class="material-icons">
+            settings
+          </i>
+        </button>
+        <button mat-fab color="accent"
+                matTooltip="{{ (settings?.resourceType === 'photos' ? 'GET_PHOTOS' : 'GET_VIDEOS') | translate | ucfirst}}"
+                [disabled]="!currentCity" (click)="getResources()">
+          <i class="material-icons">
+            {{settings?.resourceType === 'photos' ? 'photo' : 'video_library'}}
+          </i>
+        </button>
+
+        <button class="buttons__track" mat-fab color="primary"
+                matTooltip="{{(tracking ? 'STOP_ISS_TRACKING': 'START_ISS_TRACKING') | translate | ucfirst }}"
+                (click)="toggleTracking()">
+          <i class="material-icons">
+            {{(!tracking) ? 'play_arrow' : 'pause'}}
+          </i>
+        </button>
+      </div>
+    </div>
+
+  </mat-drawer-container>
+
 </div>

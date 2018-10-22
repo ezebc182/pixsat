@@ -1,24 +1,45 @@
 
 agm-map {
-    height: 100vh;
+  height: 100vh;
+}
+
+a {
+  text-decoration: none;
 }
 
 .buttons {
-    right: 25px;
-    bottom: 25px;
-    position: absolute;
+  right: 10px;
+  bottom: 10px;
+  position: absolute;
 }
 
 .buttons > button {
-    margin-left: 20px;
+  margin-left: 20px;
 }
 
-.pixabay {
-    z-index: 999;
-    position: absolute;
-    left: 25px;
-    top: 25px;
-}
 .pixabay img {
-    width: 50px;
+  width: 50px;
+}
+
+.sidenav-container {
+  width: 100vw;
+  height: 100vh;
+}
+
+.sidenav-content {
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.sidenav {
+  padding: 20px;
+  width: 200px;
+}
+
+.sidenav-menu {
+  z-index: 999;
+  position: absolute;
+  left: 25px;
+  top: 25px;
 }

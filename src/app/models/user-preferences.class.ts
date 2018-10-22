@@ -3,4 +3,5 @@ export class UserPreferences {
     resourceType: string;
     resultsQuantity: number;
     trackOnInit: boolean;
+    units: string;
 }

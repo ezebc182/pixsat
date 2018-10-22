@@ -1,26 +1,26 @@
 <h2 mat-dialog-title>{{ data?.type.toUpperCase() | translate | ucfirst }} - {{ data?.location }}</h2>
 <mat-dialog-content>
-    <div class="row">
-        <div class="col-12">
-            <div class="display_dialog_results_photos" *ngIf="data.type === 'photos'">
+  <div class="row">
+    <div class="col-12">
+      <div class="display_dialog_results_photos" *ngIf="data.type === 'photos'">
 
-                <div class="photos" *ngFor="let resource of data.resources">
-                    <a href="{{resource.pageURL}}" target="_blank">
-                        <img class="img-thumbnail" src="{{resource.previewURL}}" alt="">
-                    </a>
-                </div>
-            </div>
-            <div class="display_dialog_results_videos" *ngIf="data.type === 'videos'">
-                <div class="videos" *ngFor="let resource of data.resources">
-                    <video width="100%" height="240" controls>
-                        <source [src]="resource.videos.tiny.url | safe" type="video/mp4">
-                    </video>
-                </div>
-
-            </div>
+        <div class="photos" *ngFor="let resource of data.resources">
+          <a href="{{resource.pageURL}}" target="_blank">
+            <img class="img-thumbnail" src="{{resource.previewURL}}" alt="">
+          </a>
         </div>
+      </div>
+      <div class="display_dialog_results_videos" *ngIf="data.type === 'videos'">
+        <div class="videos" *ngFor="let resource of data.resources">
+          <video width="100%" height="240" controls>
+            <source [src]="resource.videos.tiny.url | safe" type="video/mp4">
+          </video>
+        </div>
+
+      </div>
     </div>
+  </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-    <button class="btn_close" mat-button mat-dialog-close>{{'ACTION__CLOSE' | translate | ucfirst }}</button>
+  <button class="btn_close" mat-button mat-dialog-close>{{'ACTION__CLOSE' | translate | ucfirst }}</button>
 </mat-dialog-actions>

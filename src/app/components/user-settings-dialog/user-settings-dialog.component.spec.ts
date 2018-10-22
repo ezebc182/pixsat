@@ -1,4 +1,4 @@
-import {async, ComponentFixture, TestBed} from '@angular/core/testing';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { UserSettingsDialogComponent } from './user-settings-dialog.component';
 import { UcfirstPipe } from 'src/app/pipes/ucfirst.pipe';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
@@ -8,15 +8,17 @@ import { createTranslateLoader } from 'src/app/app.module';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient } from '@angular/common/http';
 import {
-		 MatDialogRef,
-		 MAT_DIALOG_DATA,
-		 MatDialogTitle,
-		 MatSelect,
-		 MatCheckbox,
-		 MatRadioGroup,
-		 MatInput } from '@angular/material';
+  MAT_DIALOG_DATA,
+  MatDialogRef,
+  MatDialogTitle,
+  MatInput,
+  MatRadioGroup,
+  MatSelect,
+  MatSlideToggle
+} from '@angular/material';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { By } from '@angular/platform-browser';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 describe('UserSettingsDialogComponent', () => {
   let component: UserSettingsDialogComponent;
@@ -24,24 +26,26 @@ describe('UserSettingsDialogComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-        schemas: [ NO_ERRORS_SCHEMA],
-        imports: [
-          BrowserAnimationsModule,
-          MaterialModule,
-          HttpClientTestingModule,
-          TranslateModule.forRoot({
-            loader: {
-              provide: TranslateLoader,
-              useFactory: createTranslateLoader,
-              deps: [HttpClient, UcfirstPipe]
-            }
-          })
-        ],
+      schemas: [NO_ERRORS_SCHEMA],
+      imports: [
+        BrowserAnimationsModule,
+        MaterialModule,
+        FormsModule,
+        ReactiveFormsModule,
+        HttpClientTestingModule,
+        TranslateModule.forRoot({
+          loader: {
+            provide: TranslateLoader,
+            useFactory: createTranslateLoader,
+            deps: [HttpClient, UcfirstPipe]
+          }
+        })
+      ],
       declarations: [UserSettingsDialogComponent, UcfirstPipe],
       providers: [
-         UcfirstPipe,
-        { provide: MatDialogRef, useValue: {} },
-        { provide: MAT_DIALOG_DATA, useValue: [] },
+        UcfirstPipe,
+        {provide: MatDialogRef, useValue: {}},
+        {provide: MAT_DIALOG_DATA, useValue: []},
       ]
     }).compileComponents();
   }));
@@ -49,11 +53,12 @@ describe('UserSettingsDialogComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(UserSettingsDialogComponent);
     component = fixture.componentInstance;
-    component.settings = {
+    component.data = {
       language: 'en',
       resourceType: 'photos',
       resultsQuantity: 15,
-      trackOnInit: false
+      trackOnInit: false,
+      units: 'kilometers'
     };
     fixture.detectChanges();
   });
@@ -86,39 +91,44 @@ describe('UserSettingsDialogComponent', () => {
     expect(buttonSaveDE.nativeElement.textContent.trim()).toEqual('ACTION__SAVE');
     expect(buttonSaveDEAttributes).toContain('mat-raised-button');
     buttonSaveDEListeners.forEach(listener => {
-        expect(listener.name).toEqual('click');
+      expect(listener.name).toEqual('click');
     });
   });
 
   it('should render language select', () => {
-		const sectionLanguageDE = fixture.debugElement.query(By.css('.language'));
-		const selectLanguageDE = fixture.debugElement.query(By.directive(MatSelect));
-		expect(sectionLanguageDE).toBeTruthy();
-		expect(selectLanguageDE).toBeTruthy();
-		expect(selectLanguageDE.children[0].nativeElement.textContent.trim()).toEqual('OPTION__SELECT_LANGUAGE');
-		expect(selectLanguageDE.children[0].childNodes.length).toBe(2);
+    const sectionLanguageDE = fixture.debugElement.query(By.css('.language'));
+    const selectLanguageDE = fixture.debugElement.query(By.directive(MatSelect));
+    expect(sectionLanguageDE).toBeTruthy();
+    expect(selectLanguageDE).toBeTruthy();
+    expect(selectLanguageDE.children[0].nativeElement.textContent.trim()).toEqual('OPTION__SELECT_LANGUAGE');
+    expect(selectLanguageDE.children[0].childNodes.length).toBe(2);
   });
 
-  it('should render tracking checkbox', () => {
-		const trackCheckboxDE = fixture.debugElement.query(By.directive(MatCheckbox));
-		expect(fixture.debugElement.query(By.css('.tracking'))).toBeTruthy();
-		expect(trackCheckboxDE).toBeTruthy();
-		expect(trackCheckboxDE.nativeElement.textContent.trim()).toEqual('OPTION__AUTOPLAY_TRACKING?');
+  it('should render track on init slide toggle', () => {
+    const trackOnInitSlideToggleDE = fixture.debugElement.query(By.directive(MatSlideToggle));
+    const trackOnInitSection = fixture.debugElement.query(By.css('.tracking'));
+    expect(trackOnInitSection).toBeTruthy();
+    expect(trackOnInitSection.children[0].nativeElement.textContent.trim()).toEqual('OPTION__AUTOPLAY_TRACKING?');
+    expect(trackOnInitSlideToggleDE).toBeTruthy();
+    expect(trackOnInitSlideToggleDE.nativeElement.textContent.trim()).toEqual('OPTION__NO');
+    component.data.trackOnInit = true;
+    fixture.detectChanges();
+    expect(trackOnInitSlideToggleDE.nativeElement.textContent.trim()).toEqual('OPTION__YES');
   });
 
   it('should render resource type radio buttons', () => {
-		const resourceTypeRadioGroupDE = fixture.debugElement.query(By.directive(MatRadioGroup));
-		expect(fixture.debugElement.query(By.css('.resource'))).toBeTruthy();
-		expect(resourceTypeRadioGroupDE).toBeTruthy();
-		expect(resourceTypeRadioGroupDE.children[0].nativeElement.textContent.trim()).toEqual('PHOTOS');
-		expect(resourceTypeRadioGroupDE.children[1].nativeElement.textContent.trim()).toEqual('VIDEOS');
+    const resourceTypeRadioGroupDE = fixture.debugElement.query(By.directive(MatRadioGroup));
+    expect(fixture.debugElement.query(By.css('.resource'))).toBeTruthy();
+    expect(resourceTypeRadioGroupDE).toBeTruthy();
+    expect(resourceTypeRadioGroupDE.children[0].nativeElement.textContent.trim()).toEqual('PHOTOS');
+    expect(resourceTypeRadioGroupDE.children[1].nativeElement.textContent.trim()).toEqual('VIDEOS');
   });
 
   it('should render results quantity input', () => {
-		const resultsPerPageInputDE = fixture.debugElement.query(By.directive(MatInput));
-		expect(fixture.debugElement.query(By.css('.results'))).toBeTruthy();
-		expect(resultsPerPageInputDE).toBeTruthy();
-		expect(resultsPerPageInputDE.attributes.placeholder).toEqual('PLACEHOLDER__RESULTS_PER_PAGE');
+    const resultsPerPageInputDE = fixture.debugElement.query(By.directive(MatInput));
+    expect(fixture.debugElement.query(By.css('.results'))).toBeTruthy();
+    expect(resultsPerPageInputDE).toBeTruthy();
+    expect(resultsPerPageInputDE.attributes.placeholder).toEqual('PLACEHOLDER__RESULTS_PER_PAGE');
   });
 });
 

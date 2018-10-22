@@ -1,38 +1,69 @@
 <h2 mat-dialog-title>{{'TITLE__USER_SETTINGS' | translate | ucfirst }}</h2>
 <mat-dialog-content>
-    <div class="container">
-        <section class="section language">
-            <mat-form-field>
-                <mat-select [(ngModel)]="settings.language" [value]="data?.language" placeholder="{{ 'OPTION__SELECT_LANGUAGE' | translate | ucfirst }}">
-                    <mat-option class="language_option" value="en">{{'OPTION__LANGUAGE_EN' | translate | ucfirst}}</mat-option>
-                    <mat-option class="language_option" value="es">{{'OPTION__LANGUAGE_ES' | translate | ucfirst}}</mat-option>
-                </mat-select>
-            </mat-form-field>
-        </section>
+  <div class="container">
+    <form [formGroup]="settingsForm" novalidate>
+      <section class="section language">
+        <mat-form-field>
+          <mat-select formControlName='language'
+                      [value]="data?.language"
+                      placeholder="{{ 'OPTION__SELECT_LANGUAGE' | translate | ucfirst }}">
+            <mat-option class="language_option" value="en">{{'OPTION__LANGUAGE_EN' | translate | ucfirst}}</mat-option>
+            <mat-option class="language_option" value="es">{{'OPTION__LANGUAGE_ES' | translate | ucfirst}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </section>
 
-        <section class="section tracking">
-            <mat-checkbox [(ngModel)]="settings.trackOnInit" [value]="data?.trackOnInit">
-                {{'OPTION__AUTOPLAY_TRACKING' | translate | ucfirst }}?
-            </mat-checkbox>
-        </section>
+      <section class="section units">
+        <mat-form-field>
+          <mat-select formControlName='units'
+                      [value]="data?.units"
+                      placeholder="{{ 'OPTION__SELECT_UNITS' | translate | ucfirst }}">
+            <mat-option class="unit_option" value="kilometers">{{'OPTION__UNIT_KM' | translate | ucfirst}}</mat-option>
+            <mat-option class="unit_option" value="miles">{{'OPTION__UNIT_MI' | translate | ucfirst}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </section>
 
+      <section class="section tracking">
+        <p>
+          {{'OPTION__AUTOPLAY_TRACKING' | translate | ucfirst }}?
+        </p>
+        <div class="tracking__slide">
+          <mat-slide-toggle
+                  formControlName='trackOnInit'
+                  [checked]="data?.trackOnInit">
+            {{ (data?.trackOnInit ? 'OPTION__YES' : 'OPTION__NO') | translate | ucfirst}}
+          </mat-slide-toggle>
+        </div>
+      </section>
 
-        <section class="section resource">
-            <mat-radio-group [value]="data?.resourceType" [(ngModel)]="settings.resourceType">
-                <mat-radio-button value="photos" [checked]="true">{{'PHOTOS' | translate | ucfirst}}</mat-radio-button>
-                <mat-radio-button value="videos">{{'VIDEOS' | translate | ucfirst}}</mat-radio-button>
-            </mat-radio-group>
-        </section>
+      <section class="section resource">
+        <p>{{'SUBTITLE__RESOURCE_TYPES' | translate | ucfirst}}</p>
+        <br>
+        <mat-radio-group
+                formControlName='resource'
+                [value]="data?.resourceType">
+          <mat-radio-button value="photos" [checked]="true">{{'PHOTOS' | translate | ucfirst}}</mat-radio-button>
+          <mat-radio-button value="videos">{{'VIDEOS' | translate | ucfirst}}</mat-radio-button>
+        </mat-radio-group>
+      </section>
 
-        <section class="section results">
-            <mat-form-field class="example-full-width">
-                <input type="number" [(ngModel)]="settings.resultsQuantity" min="3" max="200" matInput placeholder="{{'PLACEHOLDER__RESULTS_PER_PAGE' | translate | ucfirst}}" [value]="data?.resultsQuantity || 3">
-            </mat-form-field>
-        </section>
-    </div>
+      <section class="section results">
+        <mat-form-field class="example-full-width">
+          <input formControlName='results'
+                 type="number"
+                 matInput
+                 placeholder="{{'PLACEHOLDER__RESULTS_PER_PAGE' | translate | ucfirst}}"
+                 [value]="data?.resultsQuantity || 3">
+        </mat-form-field>
+      </section>
+    </form>
+  </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-    <button class="btn_close" mat-button mat-dialog-close>{{'ACTION__CLOSE' | translate | ucfirst }}</button>
-    <button class="save" (click)="saveSettings()" color="primary" mat-raised-button>{{'ACTION__SAVE' | translate | ucfirst }}
-    </button>
+  <button class="btn_close" mat-button mat-dialog-close>{{'ACTION__CLOSE' | translate | ucfirst }}</button>
+  <button [disabled]="settingsForm.invalid"
+          class="save" (click)="saveSettings()" color="primary" mat-raised-button>{{'ACTION__SAVE' | translate | ucfirst
+    }}
+  </button>
 </mat-dialog-actions>
