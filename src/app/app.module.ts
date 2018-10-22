@@ -10,7 +10,7 @@ import {PixabayService} from './services/pixabay.service';
 import {LocationService} from './services/location.service';
 import {SafePipe} from './pipes/safe.pipe';
 import {StorageService} from './services/storage.service';
-import {UserSettingsDialogComponent} from './components/user-settings-dialog/user-settings-dialog.component';
+import { UserSettingsDialogComponent } from './components/user-settings-dialog/user-settings-dialog.component';
 import {DisplayResultsDialogComponent} from './components/display-results-dialog/display-results-dialog.component';
 import {TranslateLoader, TranslateModule} from '@ngx-translate/core';
 import {TranslateHttpLoader} from '@ngx-translate/http-loader';
@@ -46,7 +46,10 @@ export function createTranslateLoader(http: HttpClient) {
     ],
     declarations: [AppComponent, DisplayResultsDialogComponent, UserSettingsDialogComponent, UcfirstPipe, SafePipe],
     providers: [LocationService, PixabayService, StorageService],
-    entryComponents: [DisplayResultsDialogComponent, UserSettingsDialogComponent],
+    entryComponents: [
+      DisplayResultsDialogComponent,
+      UserSettingsDialogComponent
+    ],
     bootstrap: [AppComponent]
 })
 export class AppModule {

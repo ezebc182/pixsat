@@ -1,13 +1,12 @@
 import {TestBed} from '@angular/core/testing';
 
 import {StorageService} from './storage.service';
-import {Satellite} from '../models/satellite.class';
 
-fdescribe('StorageService', () => {
+describe('StorageService', () => {
     let service: StorageService;
     let storage: Storage;
     let key: string;
-    let storedData: Satellite | object;
+    let storedData: any;
 
     beforeEach(() => {
         TestBed.configureTestingModule({
@@ -40,12 +39,9 @@ fdescribe('StorageService', () => {
         expect(storage.getItem(key)).toEqual(JSON.stringify((storedData)));
     });
 
-    it('should get an object previously stored', (done) => {
+    it('should get an object previously stored', () => {
         service.set(key, storedData, storage);
-        service.get(key, storage).then((data: Satellite | object) => {
-            expect(data).toEqual(storedData);
-            done();
-        });
+        expect(service.get(key, storage)).toEqual(storedData);
     });
 
     it('should delete a key previously stored', () => {

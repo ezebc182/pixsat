@@ -19,14 +19,8 @@ export class StorageService {
         return !!storage.getItem(key);
     }
 
-    get(key: string, storage: Storage): Promise<Satellite | UserPreferences | null> {
-        return new Promise(((resolve, reject) => {
-            if (storage.getItem(key)) {
-                resolve(JSON.parse(storage.getItem(key)));
-            } else {
-                reject(null);
-            }
-        }));
+    get(key: string, storage: Storage): Satellite | UserPreferences | null {
+        return storage.getItem(key) ? JSON.parse(storage.getItem(key)) : null;
     }
 
     delete(key: string, storage: Storage): void | null {

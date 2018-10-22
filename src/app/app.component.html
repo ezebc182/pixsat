@@ -4,20 +4,8 @@
     </a>
 
 </div>
-<agm-map
-        [latitude]="lat"
-        [longitude]="lng"
-        [minZoom]="3"
-        [fullscreenControl]="true"
-        [streetViewControlOptions]="streetViewControlOptions"
-        [zoomControlOptions]="zoomControlOptions"
-        [zoom]="3">
-    <agm-marker
-            [title]="'ISS'"
-            [latitude]="satellite?.lat"
-            [longitude]="satellite?.lng"
-            [iconUrl]="'assets/img/sat2-mini.png'"
-            [openInfoWindow]="true">
+<agm-map [latitude]="lat" [longitude]="lng" [minZoom]="3" [fullscreenControl]="true" [streetViewControlOptions]="streetViewControlOptions" [zoomControlOptions]="zoomControlOptions" [zoom]="3">
+    <agm-marker [title]="'ISS'" [latitude]="satellite?.lat" [longitude]="satellite?.lng" [iconUrl]="'assets/img/sat2-mini.png'" [openInfoWindow]="true">
         <agm-info-window [isOpen]="true">
             <p>
                 <a target="_blank" href="https://www.nasa.gov/mission_pages/station/main/index.html">
@@ -28,38 +16,28 @@
                 {{'CURRENT_POSITION' | translate | ucfirst }}:
                 <b>{{currentCity ? currentCity : 'UNKNOWN' | ucfirst }}</b>
             </p>
-            {{'LATITUDE' | translate | ucfirst }}: {{lat | number }} - {{ 'LONGITUDE' | translate | ucfirst}}: {{ lng |
-            number }} <br/>
-            {{'VELOCITY' | translate | ucfirst }}: {{ satellite?.velocity | number }} km/h<br/>
-            {{'ALTITUDE' | translate | ucfirst }}: {{ satellite?.altitude | number }} km
+            {{'LATITUDE' | translate | ucfirst }}: {{lat | number }} - {{ 'LONGITUDE' | translate | ucfirst}}: {{ lng | number }} <br/> {{'VELOCITY' | translate | ucfirst }}: {{ satellite?.velocity | number }} km/h<br/> {{'ALTITUDE' | translate | ucfirst
+            }}: {{ satellite?.altitude | number }} km
         </agm-info-window>
     </agm-marker>
 </agm-map>
 
 <div class="buttons">
 
-    <button mat-fab color="default"
-            [disabled]="tracking"
-            matTooltip="{{'SETTINGS' | translate | ucfirst}}"
-            (click)="openSettings()">
-        <i class="material-icons">
-            settings
-        </i>
-    </button>
-    <button mat-fab color="accent"
-            matTooltip="{{ (settings?.resourceType === 'photos' ? 'GET_PHOTOS' : 'GET_VIDEOS') | translate | ucfirst}}"
-            [disabled]="!currentCity"
-            (click)="getResources()">
-        <i class="material-icons">
-            {{settings?.resourceType === 'photos' ? 'photo' : 'video_library'}}
-        </i>
-    </button>
+    <button mat-fab color="default" [disabled]="tracking" matTooltip="{{'SETTINGS' | translate | ucfirst}}" (click)="openSettings()">
+			<i class="material-icons">
+					settings
+			</i>
+	</button>
+    <button mat-fab color="accent" matTooltip="{{ (settings?.resourceType === 'photos' ? 'GET_PHOTOS' : 'GET_VIDEOS') | translate | ucfirst}}" [disabled]="!currentCity" (click)="getResources()">
+			<i class="material-icons">
+					{{settings?.resourceType === 'photos' ? 'photo' : 'video_library'}}
+			</i>
+	</button>
 
-    <button mat-fab color="primary"
-            matTooltip="{{(tracking ? 'STOP_ISS_TRACKING': 'START_ISS_TRACKING') | translate | ucfirst }}"
-            (click)="toggleTracking()">
-        <i class="material-icons">
-            {{(!tracking) ? 'play_arrow' : 'pause'}}
-        </i>
-    </button>
+    <button mat-fab color="primary" matTooltip="{{(tracking ? 'STOP_ISS_TRACKING': 'START_ISS_TRACKING') | translate | ucfirst }}" (click)="toggleTracking()">
+			<i class="material-icons">
+					{{(!tracking) ? 'play_arrow' : 'pause'}}
+			</i>
+	</button>
 </div>

@@ -23,10 +23,6 @@ export class UserSettingsDialogComponent implements OnInit {
         }
     }
 
-    toggleLanguage() {
-        this.translate.use(this.settings.language);
-    }
-
     saveSettings() {
         this.dialogRef.close(this.settings);
     }
