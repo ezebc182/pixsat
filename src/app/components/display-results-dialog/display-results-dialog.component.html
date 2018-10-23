@@ -2,24 +2,34 @@
 <mat-dialog-content>
   <div class="row">
     <div class="col-12">
-      <div class="display_dialog_results_photos" *ngIf="data.type === 'photos'">
+      <div *ngIf="!loading">
+        <div class="display_dialog_results_photos" *ngIf="data.type === 'photos'">
 
-        <div class="photos" *ngFor="let resource of data.resources">
-          <a href="{{resource.pageURL}}" target="_blank">
-            <img class="img-thumbnail" src="{{resource.previewURL}}" alt="">
-          </a>
+          <div class="photos" *ngFor="let resource of data.resources">
+            <a href="{{resource.pageURL}}" target="_blank">
+              <img class="img-thumbnail" src="{{resource.previewURL}}" alt="">
+            </a>
+          </div>
+        </div>
+        <div class="display_dialog_results_videos" *ngIf="data.type === 'videos'">
+          <div class="videos" *ngFor="let resource of data.resources">
+            <video width="100%" height="240" controls>
+              <source [src]="resource.videos.tiny.url | safe" type="video/mp4">
+            </video>
+          </div>
+
         </div>
       </div>
-      <div class="display_dialog_results_videos" *ngIf="data.type === 'videos'">
-        <div class="videos" *ngFor="let resource of data.resources">
-          <video width="100%" height="240" controls>
-            <source [src]="resource.videos.tiny.url | safe" type="video/mp4">
-          </video>
-        </div>
+      <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
 
-      </div>
     </div>
   </div>
+  <mat-divider></mat-divider>
+    <div class="pixabay">
+      <img src="https://pixabay.com/static/img/logo_square.png" alt="Pixabay">
+      <small>Free images and videos released on Pixabay under Creative Commons CC0</small>
+    </div>
+
 </mat-dialog-content>
 <mat-dialog-actions>
   <button class="btn_close" mat-button mat-dialog-close>{{'ACTION__CLOSE' | translate | ucfirst }}</button>

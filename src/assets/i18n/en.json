@@ -23,6 +23,8 @@
   "ACTION__CLOSE": "Close",
   "ACTION__SAVE": "Save",
   "TITLE__USER_SETTINGS": "User settings",
+  "TITLE__MAIN_MENU": "Main menu",
+  "TITLE__LAST_FLOWN_PLACES": "Last 10 overflown places by ISS",
   "OPTION__AUTOPLAY_TRACKING": "Start ISS tracking on init",
   "OPTION__SELECT_LANGUAGE": "Select language",
   "OPTION__SELECT_UNITS": "Select units",
@@ -34,5 +36,6 @@
   "OPTION__NO": "No",
   "PLACEHOLDER__RESULTS_PER_PAGE": "How many results you expect to see?",
   "SUBTITLE__RESOURCE_TYPES": "What you would like to obtain from a particular city?",
+  "TOOLTIP__CHECKOUT_IT": "Check-out source code on Github",
   "ERROR__GENERIC": "Something went wrong! Please try again."
 }

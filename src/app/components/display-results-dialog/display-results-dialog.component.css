@@ -3,3 +3,7 @@
     display: flex !important;
     flex-wrap: wrap !important;
 }
+
+.pixabay img {
+  width: 50px;
+}

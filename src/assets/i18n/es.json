@@ -23,6 +23,8 @@
   "ACTION__CLOSE": "Cerrar",
   "ACTION__SAVE": "Guardar",
   "TITLE__USER_SETTINGS": "Preferencias de usuario",
+  "TITLE__MAIN_MENU": "Menú principal",
+  "TITLE__LAST_FLOWN_PLACES": "Últimas 10 ciudades sobrevoladas por ISS",
   "OPTION__AUTOPLAY_TRACKING": "Seguir ISS al iniciar",
   "OPTION__SELECT_LANGUAGE": "Selecione idioma",
   "OPTION__SELECT_UNITS": "Seleccione unidad de medición",
@@ -34,5 +36,6 @@
   "OPTION__NO": "No",
   "PLACEHOLDER__RESULTS_PER_PAGE": "¿Cuántos resultados esperas ver?",
   "SUBTITLE__RESOURCE_TYPES": "¿Que le gustaría obtener de una ciudad en particular?",
+  "TOOLTIP__CHECKOUT_IT": "Mirá mi proyecto en Github!",
   "ERROR__GENERIC": "Algo salió mal! Inténtelo de nuevo."
 }

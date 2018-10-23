@@ -16,7 +16,7 @@ export class UnitPipe implements PipeTransform {
 
   transform (value: any, args?: any): any {
     this.userPreferences = <UserPreferences>this.storageService.get(storageSettings.USER_KEY, storageSettings.STORAGE);
-    let units = null;
+    let units = '';
 
     if (args && this.userPreferences) {
       units = `${args[0] === 'kilometers' ? 'km' : 'mi'}`;

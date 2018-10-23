@@ -17,10 +17,6 @@ a {
   margin-left: 20px;
 }
 
-.pixabay img {
-  width: 50px;
-}
-
 .sidenav-container {
   width: 100vw;
   height: 100vh;
@@ -33,8 +29,11 @@ a {
 }
 
 .sidenav {
-  padding: 20px;
-  width: 200px;
+  width: 250px;
+}
+
+.sidenav > img {
+  width: 100%;
 }
 
 .sidenav-menu {
@@ -42,4 +41,21 @@ a {
   position: absolute;
   left: 25px;
   top: 25px;
+}
+
+.git-link {
+  color: #ffffff;
+  text-decoration: none;
+}
+
+.git-link:hover {
+  color: #ff4081;
+}
+
+.git-icon {
+  padding: 10px 20px 10px 10px;
+}
+
+.spacer {
+  flex: 1 1 auto;
 }

@@ -1,5 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { of, Subscription } from 'rxjs';
+import { Subscription } from 'rxjs';
 import {
   ControlPosition,
   StreetViewControlOptions,
@@ -9,7 +9,6 @@ import {
 import { MatDialog, MatSnackBar, MatSnackBarRef, SimpleSnackBar } from '@angular/material';
 import { PixabayService } from './services/pixabay.service';
 import { LocationService } from './services/location.service';
-import { delay } from 'rxjs/operators';
 import { StorageService } from './services/storage.service';
 import { Satellite } from './models/satellite.class';
 import { DisplayResultsDialogComponent } from './components/display-results-dialog/display-results-dialog.component';
@@ -30,6 +29,7 @@ export class AppComponent implements OnInit, OnDestroy {
   satellite: Satellite;
   settings: UserPreferences;
   place: object;
+  flownPlaces: Array<Satellite>;
   currentCity: string;
   subscriptionISS: Subscription;
   zoomControlOptions: ZoomControlOptions = {
@@ -48,11 +48,6 @@ export class AppComponent implements OnInit, OnDestroy {
     public snack: MatSnackBar,
     public dialog: MatDialog,
     public translate: TranslateService) {
-
-  }
-
-  ngOnInit () {
-    this.checkUserPreferences();
     this.lat = 0;
     this.lng = 0;
     this.satellite = {
@@ -61,6 +56,13 @@ export class AppComponent implements OnInit, OnDestroy {
       altitude: 0,
       velocity: 0
     };
+  }
+
+  ngOnInit () {
+    this.syncPosition();
+    this.retrieveLastKnownPosition();
+    this.checkUserPreferences();
+    this.loadFlownPlaces();
   }
 
   ngOnDestroy () {
@@ -111,10 +113,11 @@ export class AppComponent implements OnInit, OnDestroy {
     this.showMessage('MESSAGE__STOPPING_TRACK');
   }
 
-  getResources () {
+  getResources (place?) {
     let requestType = 'getPhotos';
     let action = null;
     let results = 'MESSAGE__ZERO_RESULTS';
+    const placeToSearchFor = place ? place : this.currentCity;
     if (this.settings.resourceType && this.settings.resourceType !== 'photos') {
       requestType = 'getVideos';
     }
@@ -122,18 +125,18 @@ export class AppComponent implements OnInit, OnDestroy {
     this.translate.get('MESSAGE__SEARCHING',
       {
         'selection': this.translate.instant(this.settings.resourceType.toUpperCase()),
-        'currentCity': this.currentCity
+        'currentCity': placeToSearchFor
       })
       .subscribe((translation) => {
         this.showMessage(translation)
           .afterDismissed().subscribe(() => {
-          this.pixabayService[requestType](this.slugify(this.currentCity)).subscribe((resources) => {
+          this.pixabayService[requestType](this.slugify(placeToSearchFor)).subscribe((resources) => {
             if (resources && resources.totalHits > 0) {
               action = this.translate.instant('ACTION__OPEN_RESULTS');
               results = this.translate.instant('MESSAGE__RESULTS_FOUND');
             }
             const snackRef = this.snack.open(results, action);
-            snackRef.onAction().subscribe(() => this.openDialog(resources));
+            snackRef.onAction().subscribe(() => this.openDialog(resources, placeToSearchFor));
           });
         });
       });
@@ -157,11 +160,11 @@ export class AppComponent implements OnInit, OnDestroy {
     });
   }
 
-  openDialog (sources): void {
+  openDialog (sources, place?): void {
     this.dialog.open(DisplayResultsDialogComponent, {
       width: '800px',
       data: {
-        location: this.currentCity,
+        location: place ? place : this.currentCity,
         resources: sources.hits,
         type: this.settings.resourceType
       }
@@ -175,7 +178,8 @@ export class AppComponent implements OnInit, OnDestroy {
         lat: response.latitude,
         lng: response.longitude,
         altitude: response.altitude,
-        velocity: response.velocity
+        velocity: response.velocity,
+        currentPlace: this.currentCity
       };
       this.storageService.set(storageSettings.POSITION_KEY, this.satellite, storageSettings.STORAGE);
       this.lat = response.latitude;
@@ -189,6 +193,7 @@ export class AppComponent implements OnInit, OnDestroy {
             currentPlace: this.currentCity
           };
           this.storageService.set(storageSettings.POSITION_KEY, this.satellite, storageSettings.STORAGE);
+          this.loadFlownPlaces();
         }
       }, (e) => this.error(e));
     }
@@ -223,6 +228,29 @@ export class AppComponent implements OnInit, OnDestroy {
       .replace(/\s+/g, '+');
   }
 
+  private retrieveLastKnownPosition () {
+    /*this.lat = -31.379780;
+    this.lng = -64.233602;
+    this.currentCity = 'la+falda';
+    this.satellite = {
+      ...this.satellite,
+      lat: this.lat,
+      lng: this.lng
+    };*/
+    if (this.storageService.exists(storageSettings.POSITION_KEY, localStorage)) {
+      const lastPosition = <Satellite>this.storageService.get(storageSettings.POSITION_KEY, localStorage);
+      this.satellite = {
+        ...this.satellite,
+        lat: lastPosition.lat,
+        lng: lastPosition.lng,
+        altitude: lastPosition.altitude,
+        velocity: lastPosition.velocity
+      };
+      this.lat = lastPosition.lat;
+      this.lng = lastPosition.lng;
+    }
+  }
+
   private checkUserPreferences () {
     const userSettings = <UserPreferences>this.storageService.get(storageSettings.USER_KEY, localStorage);
     if (userSettings) {
@@ -232,6 +260,10 @@ export class AppComponent implements OnInit, OnDestroy {
       this.translate.use('en');
       setTimeout(() => this.openSettings());
     }
+  }
+
+  private loadFlownPlaces () {
+    this.flownPlaces = <Array<Satellite>>this.storageService.get(storageSettings.FLOWN_PLACES_KEY, storageSettings.STORAGE);
   }
 
   private init (data: UserPreferences) {

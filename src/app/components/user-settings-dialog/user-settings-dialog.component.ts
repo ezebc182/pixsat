@@ -35,12 +35,13 @@ export class UserSettingsDialogComponent implements OnInit {
   }
 
   saveSettings () {
-    const settings = new UserPreferences();
-    settings.trackOnInit = this.settingsForm.controls.trackOnInit.value;
-    settings.language = this.settingsForm.controls.language.value;
-    settings.resultsQuantity = this.settingsForm.controls.results.value;
-    settings.resourceType = this.settingsForm.controls.resource.value;
-    settings.units = this.settingsForm.controls.units.value;
+    const settings = new UserPreferences(
+      this.settingsForm.controls.language.value,
+      this.settingsForm.controls.resource.value,
+      this.settingsForm.controls.results.value,
+      this.settingsForm.controls.trackOnInit.value,
+      this.settingsForm.controls.units.value
+    );
 
     this.dialogRef.close(settings);
   }

@@ -1,23 +1,17 @@
 <div class="wrapper">
   <mat-drawer-container class="sidenav-container">
     <mat-drawer #drawer class="sidenav" mode="side">
-      <h5>Main menu</h5>
+      <img src="https://polimi.vianbo.com/wp-content/uploads/2018/05/123.png" alt="Cities">
       <mat-divider></mat-divider>
-      <mat-nav-list>
-        <mat-list-item>
-          <a matLine href="#" (click)="openSettings()">{{'SETTINGS' | translate | ucfirst}}</a>
+      <h4 class="text-center">{{'TITLE__LAST_FLOWN_PLACES' | translate | ucfirst}}</h4>
+      <p *ngIf="!flownPlaces" class="text-center">{{'MESSAGE__ZERO_RESULTS' | translate | ucfirst}}</p>
+      <mat-nav-list class="text-center" *ngIf="flownPlaces">
+        <mat-list-item *ngFor="let place of flownPlaces"
+                       matTooltip="{{ (settings?.resourceType === 'photos' ? 'GET_PHOTOS' : 'GET_VIDEOS') | translate | ucfirst}}">
+          <a matLine href="#" (click)="getResources(place.currentPlace)">
+            {{place.currentPlace}}</a>
         </mat-list-item>
       </mat-nav-list>
-      <!-- <mat-nav-list dense>
-          <p><strong>User settings</strong></p>
-          <a mat-list-item href="#" (click)="openSettings()">
-            {{'SETTINGS' | translate | ucfirst}}
-          </a>
-          <mat-divider></mat-divider>
-          <p><strong>Latest cities / places</strong></p>
-          <mat-divider></mat-divider>
-      </mat-nav-list> -->
-
     </mat-drawer>
 
     <div class="sidenav-content">
@@ -27,6 +21,16 @@
             <mat-icon>menu</mat-icon>
           </button>
           <span>PixSAT</span>
+          <span class="spacer"></span>
+          <a target="_blank"
+             class="git-link" href="https://github.com/ezebc182/pixsat"
+             matTooltip="{{'TOOLTIP__CHECKOUT_IT' | translate | ucfirst}}">
+            <mat-icon class="git-icon">code</mat-icon>
+          </a>
+
+          <div class="pull-right">
+
+          </div>
         </mat-toolbar-row>
       </mat-toolbar>
       <agm-map class="map" [latitude]="lat" [longitude]="lng" [minZoom]="3" [fullscreenControl]="true"
@@ -44,10 +48,10 @@
               {{'CURRENT_POSITION' | translate | ucfirst }}:
               <b>{{currentCity ? currentCity : ('UNKNOWN' | translate) | ucfirst }}</b>
             </p>
-            {{'LATITUDE' | translate | ucfirst }}: {{lat | number }} - {{ 'LONGITUDE' | translate |
-            ucfirst}}: {{ lng | number }} <br/> {{'VELOCITY' | translate | ucfirst }}: {{
-            satellite?.velocity | number | unit:[settings?.units, 'velocity'] }}<br/>
-            {{'ALTITUDE' | translate | ucfirst }}: {{ satellite?.altitude | number | unit:[settings?.units] }}
+            {{'LATITUDE' | translate | ucfirst}}: {{lat | number }} <br>
+            {{'LONGITUDE'| translate | ucfirst}}: {{lng | number }} <br/>
+            {{'VELOCITY' | translate | ucfirst}}: {{satellite?.velocity | number | unit:[settings?.units, 'velocity'] }}<br/>
+            {{'ALTITUDE' | translate | ucfirst}}: {{satellite?.altitude | number | unit:[settings?.units] }}
           </agm-info-window>
         </agm-marker>
       </agm-map>
