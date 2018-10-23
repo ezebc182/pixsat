@@ -11,7 +11,7 @@ import storageSettings from '../../app/misc/constants';
 export class StorageService {
 
   constructor () {
-    const KEYS = [storageSettings.POSITION_KEY, storageSettings.USER_KEY, storageSettings.FLOWN_PLACES_KEY];
+    const KEYS = [storageSettings.POSITION_KEY, storageSettings.USER_KEY];
     KEYS.map((key) => {
       if (this.exists(key, storageSettings.STORAGE) && this.isCorrupted(key, storageSettings.STORAGE)) {
         this.delete(key, storageSettings.STORAGE);
