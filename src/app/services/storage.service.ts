@@ -44,7 +44,7 @@ export class StorageService {
     if (this.exists(storageSettings.FLOWN_PLACES_KEY, storageSettings.STORAGE)) {
       const storedPlaces = <Array<Satellite>>this.get(storageSettings.FLOWN_PLACES_KEY, storageSettings.STORAGE);
       if (storedPlaces.length === 10) {
-        storedPlaces.unshift();
+        storedPlaces.reverse().pop();
       }
 
       if (!_.includes(_.map(storedPlaces, 'currentPlace'), data.currentPlace)) {
